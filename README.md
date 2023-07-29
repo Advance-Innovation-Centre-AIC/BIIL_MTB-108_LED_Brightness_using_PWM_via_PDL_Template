@@ -1,4 +1,4 @@
-# Empty application template
+# BIIL_MTB-108_LED_Brightness_using_PWM_via_PDL_Template
 
 This is a minimal starter application template for Infineon MCU devices.
 
