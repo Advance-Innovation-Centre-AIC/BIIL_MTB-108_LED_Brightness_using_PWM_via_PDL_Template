@@ -103,7 +103,7 @@ Document title: BILL_MTB-108 – Read potentiometer sensor value via an ADC PDL
 
  Version | Description of change
  ------- | ---------------------
- 1.0.0   | Lab 110: Learn basic GPIO control with PSoC 6, using ADC read potentiometer sensor value via PDL
+ 1.0.0   | Lab 110: Learn basic GPIO of controlling LED brightness using PWM via  Peripheral Driver Library (PDL) on a PSoC 6 microcontroller.
 
 ## Authors:
 - *Assoc. Prof. Wiroon Sriborrirux*
