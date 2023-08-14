@@ -11,57 +11,58 @@ This Lab demonstrates the process of controlling an LED brightness using PWM via
 
 ## 🚩 Let start
 ### Create Application 
-![image](https://github.com/Advance-Innovation-Centre-AIC/BIIL_MTB-108_Read_potentiometer_sensor_value_via_an_ADC_PDL_Template/assets/88732241/9772aa4a-2a04-4e57-bf5b-68444ed1e38d)
+![image](https://2700952642-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F-MClo3nC-1US0rbK8Qau%2Fuploads%2FYkuKYh6aVcdXJtCIfFgA%2Fimage.png?alt=media&token=3762f247-cc7d-439f-b28f-69194e506d11)
 
 ### Use Device Configurator and set the UART and ADC pin
-#### Enable UART Pin:
-![image](https://github.com/Advance-Innovation-Centre-AIC/BIIL_MTB-108_Read_potentiometer_sensor_value_via_an_ADC_PDL_Template/assets/88732241/3c02deae-965c-4ba4-a06c-dfe6de2a206b)
-![image](https://github.com/Advance-Innovation-Centre-AIC/BIIL_MTB-108_Read_potentiometer_sensor_value_via_an_ADC_PDL_Template/assets/88732241/a7a53d7d-3bcd-41a3-a7de-f73e0bc8fa23)
-
-##### Config ADC
-![image](https://github.com/Advance-Innovation-Centre-AIC/BIIL_MTB-108_Read_potentiometer_sensor_value_via_an_ADC_PDL_Template/assets/88732241/50c27970-64c7-40af-a377-ed3c40eea99f)
-![image](https://github.com/Advance-Innovation-Centre-AIC/BIIL_MTB-108_Read_potentiometer_sensor_value_via_an_ADC_PDL_Template/assets/88732241/39e9bd34-81d0-4f23-bde7-f3699df45acf)
+![image](https://2700952642-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F-MClo3nC-1US0rbK8Qau%2Fuploads%2FIQfENrEaCI0aH3np0YjR%2Fimage.png?alt=media&token=7655caf7-ba23-4d7e-9983-95e1c1fdf543)
+![image](https://2700952642-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F-MClo3nC-1US0rbK8Qau%2Fuploads%2FU5JWKtNGGbDmWInNQ64d%2Fimage.png?alt=media&token=1934c438-4220-466f-9a7c-e959ede71a23)
+![image](https://2700952642-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F-MClo3nC-1US0rbK8Qau%2Fuploads%2FKeOJvh47XrYRIMaHgsIU%2Fimage.png?alt=media&token=01d4a4bd-d67a-4976-b71c-1cd99ec7bc34)
 
 
 
 ### Coding
 Coding: Open the main.c file and add the following code to the main(void) function.
 ```
-main.c
+#include "cy_pdl.h"
+#include "cybsp.h"
+
 int main(void)
 {
     cy_rslt_t result;
-    cyhal_pwm_t pwm_obj;
-​
+
     /* Initialize the device and board peripherals */
     result = cybsp_init() ;
-    if (result != CY_RSLT_SUCCESS){
+    if (result != CY_RSLT_SUCCESS)
+    {
         CY_ASSERT(0);
     }
-​
+
+    /* Enable global interrupts */
     __enable_irq();
-​
-	/* Initialize PWM on the supplied pin and assign a new clock */
-    result = cyhal_pwm_init(&pwm_obj, CYBSP_USER_LED, NULL);
-​
-	/* Start the PWM output */
-	result = cyhal_pwm_start(&pwm_obj);
-​
-	while(true){
-		for (int i = 100; i >= 0; i--){
-			result = cyhal_pwm_set_duty_cycle(&pwm_obj, i, 10000);
-			cyhal_system_delay_ms(10);
-		}
-	}
+
+    // Initialize the TCPWM block
+	Cy_TCPWM_PWM_Init(PWM_HW, PWM_NUM, &PWM_config);
+	// Enable the TCPWM block
+	Cy_TCPWM_PWM_Enable(PWM_HW, PWM_NUM);
+	// Start the PWM
+	Cy_TCPWM_TriggerReloadOrIndex(PWM_HW, PWM_MASK);
+
+    for (;;)
+    {
+    	for(int i = 0; i < 500; i++){
+    		Cy_TCPWM_PWM_SetCompare0(PWM_HW, PWM_NUM, i);
+    		Cy_SysLib_Delay(10); // Delay 10 ms
+    	}
+    }
 }
 ```
 ### Build the Application      
-![image](https://github.com/Advance-Innovation-Centre-AIC/BIIL_MTB-108_Read_potentiometer_sensor_value_via_an_ADC_PDL_Template/assets/88732241/1763207e-5360-4b37-92cb-14b9263fcf97)
+![image](https://2700952642-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F-MClo3nC-1US0rbK8Qau%2Fuploads%2FURPtO3RG4zSzdFQVBzIy%2Fimage.png?alt=media&token=279fdd2a-ac04-4142-bfed-3fd1aaed10e9)
 
 
 
 ### Launching the Application      
-![image](https://github.com/Advance-Innovation-Centre-AIC/BIIL_MTB-108_Read_potentiometer_sensor_value_via_an_ADC_PDL_Template/assets/88732241/247d4903-51d7-47a0-a7c7-dad6bbe53920)
+![image](https://2700952642-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F-MClo3nC-1US0rbK8Qau%2Fuploads%2FwIbXYtGRNDYaYwBkZGZ9%2Fimage.png?alt=media&token=de722e54-d2c4-46e9-9668-027009f4d653)
 
   Note: Before launching the program to the board, make sure that you have already connected the board to the computer through a USB cable.    
   ![image](https://github.com/Advance-Innovation-Centre-AIC/BIIL_MTB-107_Read_potentiometer_sensor_value_via_an_ADC_HAL_Template/assets/88732241/c9966b5b-702f-478e-bbe8-ba9e277800d2)
@@ -69,9 +70,9 @@ int main(void)
 
 ### Result     
   Once the device is set up, run the program. The microcontroller will continuously read the potentiometer's analog value, convert it to a digital signal through the ADC, and then convert that signal to millivolts using the PDL functions.
-![image](https://github.com/Advance-Innovation-Centre-AIC/BIIL_MTB-108_Read_potentiometer_sensor_value_via_an_ADC_PDL_Template/assets/88732241/73fc9907-773d-4f9d-8137-8aa1ca84ddbd)
+![image](https://2700952642-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F-MClo3nC-1US0rbK8Qau%2Fuploads%2FQHQJgbwkwuBXZb9bGWmq%2Fimage.png?alt=media&token=361694aa-12e4-43ef-8001-4982d0e52336)
 
-### 🎉  Congratulations! You can now complete Lab108
+### 🎉  Congratulations! You can now complete Lab110
 
 ## Supported toolchains (make variable 'TOOLCHAIN')
 
@@ -99,7 +100,7 @@ Infineon provides a wealth of data at www.infineon.com to help you select the ri
 
 ## Document history
 
-Document title: BILL_MTB-108 – Read potentiometer sensor value via an ADC PDL
+Document title: BILL_MTB-110 – Read potentiometer sensor value via an ADC PDL
 
  Version | Description of change
  ------- | ---------------------
