@@ -1,6 +1,6 @@
-# BIIL_MTB-109_LED_Brightness_using_PWM_via_PDL_Template
+# BIIL_MTB-110_LED_Brightness_using_PWM_via_PDL_Template
 
-This lab demonstrates the process of controlling LED brightness using PWM via Hardware Abstraction Layer (HAL) on a PSoC 6 microcontroller.
+This Lab demonstrates the process of controlling an LED brightness using PWM via Peripheral Driver Library (PDL) on a PSoC 6 microcontroller.
 ## 🔥 Requirements
 | Resources                                  | Links                                                                                                  |
 |--------------------------------------------|--------------------------------------------------------------------------------------------------------|
